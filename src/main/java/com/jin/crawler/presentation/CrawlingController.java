@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CrawlingController {
 
-    private CrawlingService crawlingService;
+    private final CrawlingService crawlingService;
 
     public CrawlingController(CrawlingService crawlingService) {
         this.crawlingService = crawlingService;

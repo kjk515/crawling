@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CrawlingServiceImpl implements CrawlingService {
 
-    private CrawlingStore crawlingStore;
+    private final CrawlingStore crawlingStore;
 
     public CrawlingServiceImpl(CrawlingStore crawlingStore) {
         this.crawlingStore = crawlingStore;
