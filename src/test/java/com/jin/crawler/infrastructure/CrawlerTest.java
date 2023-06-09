@@ -1,4 +1,4 @@
-package com.jin.crawling.infrastructure;
+package com.jin.crawler.infrastructure;
 
 import org.junit.jupiter.api.Test;
 
