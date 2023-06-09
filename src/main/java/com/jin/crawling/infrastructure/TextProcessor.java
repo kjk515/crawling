@@ -1,4 +1,4 @@
-package com.jin.processing;
+package com.jin.crawling.infrastructure;
 
 import lombok.Getter;
 

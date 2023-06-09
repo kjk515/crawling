@@ -1,7 +1,5 @@
-package com.jin;
+package com.jin.crawling.infrastructure;
 
-import com.jin.crawling.Crawler;
-import com.jin.processing.TextProcessor;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

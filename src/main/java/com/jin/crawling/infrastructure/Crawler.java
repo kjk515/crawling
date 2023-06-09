@@ -1,4 +1,4 @@
-package com.jin.crawling;
+package com.jin.crawling.infrastructure;
 
 import lombok.Getter;
 import org.jsoup.Connection;
