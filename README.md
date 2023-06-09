@@ -1,4 +1,4 @@
 # 과제
 
-![img.png](img.png)
-![img_1.png](img_1.png)
+![img1.png](img1.png)
+![img2.png](img2.png)
