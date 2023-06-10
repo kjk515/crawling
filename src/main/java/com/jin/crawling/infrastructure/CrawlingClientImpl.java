@@ -23,7 +23,7 @@ public class CrawlingClientImpl implements CrawlingClient {
 //        return null;
 //    }
 
-    final private int timeout = 3 * 1000;
+    final private int timeout = 10 * 1000;
     final private String url;
 
 

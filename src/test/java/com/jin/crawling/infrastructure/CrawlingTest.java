@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CrawlingTest {
 
-    private String url1 = "https://shop.hyundai.com";
-    private String url2 = "https://www.kia.com";
-    private String url3 = "https://www.genesis.com";
+    private final String url1 = "https://shop.hyundai.com";
+    private final String url2 = "https://www.kia.com";
+    private final String url3 = "https://www.genesis.com";
 
 
     @Test
@@ -39,9 +39,9 @@ public class CrawlingTest {
         String sortedText = processor.sortAscending();
         System.out.println("sorted length: " + sortedText.length());
 
-        String deduplicated = processor.deduplicate();
-        System.out.println("deduplicated length: " + deduplicated.length());
+//        String deduplicated = processor.deduplicate();
+//        System.out.println("deduplicated length: " + deduplicated.length());
 
-        System.out.println(deduplicated);
+        System.out.println(sortedText);
     }
 }

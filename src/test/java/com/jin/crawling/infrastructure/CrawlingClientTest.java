@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class CrawlingClientTest {
 
-    CrawlingClient crawlingClient;
+    private CrawlingClient crawlingClient;
 
     @Test
     public void getTest() throws IOException {
