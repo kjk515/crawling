@@ -1,5 +1,6 @@
-package com.jin.crawler.infrastructure;
+package com.jin.crawling.infrastructure;
 
+import com.jin.crawling.application.TextProcessServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class CrawlingTest {
         crawlingText = crawlingText + crawler3.get();
         System.out.println("crawling3 length: " + crawlingText.length());
 
-        TextProcessor processor = new TextProcessor(crawlingText);
+        TextProcessServiceImpl processor = new TextProcessServiceImpl(crawlingText);
         String filteredText = processor.filterEnglishAndNum();
         System.out.println("filtered length: " + filteredText.length());
 

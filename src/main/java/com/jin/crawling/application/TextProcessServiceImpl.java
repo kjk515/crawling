@@ -1,4 +1,4 @@
-package com.jin.crawler.infrastructure;
+package com.jin.crawling.application;
 
 import lombok.Getter;
 
@@ -7,14 +7,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-public class TextProcessor {
+public class TextProcessServiceImpl {
 
     final private String originText;
 
     private String text;
 
 
-    public TextProcessor(String originText) {
+    public TextProcessServiceImpl(String originText) {
         this.originText = originText;
         this.text = originText;
     }

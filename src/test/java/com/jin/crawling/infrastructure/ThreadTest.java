@@ -1,6 +1,6 @@
-package com.jin.crawler.infrastructure;
+package com.jin.crawling.infrastructure;
 
-import com.jin.crawler.config.ThreadTestConfig;
+import com.jin.crawling.config.ThreadTestConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
