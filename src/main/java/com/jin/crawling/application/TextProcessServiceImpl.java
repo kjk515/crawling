@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @Getter
 public class TextProcessServiceImpl {
 
-    final private String originText;
+    private final String originText;
 
     private String text;
 

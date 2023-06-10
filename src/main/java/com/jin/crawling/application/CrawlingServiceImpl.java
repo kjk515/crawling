@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CrawlingServiceImpl implements CrawlingService {
 
-    private final Crawler crawler;
+    private final CrawlingClient crawlingClient;
 
-    public CrawlingServiceImpl(Crawler crawler) {
-        this.crawler = crawler;
+    public CrawlingServiceImpl(CrawlingClient crawlingClient) {
+        this.crawlingClient = crawlingClient;
     }
 
     @Override

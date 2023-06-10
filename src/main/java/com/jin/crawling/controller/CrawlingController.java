@@ -13,8 +13,10 @@ public class CrawlingController {
     private final TextProcessService textProcessService;
     private final TaskExecutor taskExecutor;
 
-    public CrawlingController(CrawlingService crawlingService) {
+    public CrawlingController(CrawlingService crawlingService, TextProcessService textProcessService, TaskExecutor taskExecutor) {
         this.crawlingService = crawlingService;
+        this.textProcessService = textProcessService;
+        this.taskExecutor = taskExecutor;
     }
 
     @GetMapping("/crawling")
