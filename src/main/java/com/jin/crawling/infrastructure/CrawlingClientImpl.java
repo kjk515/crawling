@@ -1,6 +1,5 @@
 package com.jin.crawling.infrastructure;
 
-import com.jin.crawling.application.CrawlingClient;
 import lombok.Getter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

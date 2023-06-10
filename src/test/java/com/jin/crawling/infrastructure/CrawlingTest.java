@@ -20,15 +20,15 @@ public class CrawlingTest {
 
         String crawlingText = "";
 
-        Crawler crawler1 = new Crawler(url1);
+        CrawlingClient crawler1 = new CrawlingClientImpl(url1);
         crawlingText = crawlingText + crawler1.get();
         System.out.println("crawling1 length: " + crawlingText.length());
 
-        Crawler crawler2 = new Crawler(url2);
+        CrawlingClient crawler2 = new CrawlingClientImpl(url2);
         crawlingText = crawlingText + crawler2.get();
         System.out.println("crawling2 length: " + crawlingText.length());
 
-        Crawler crawler3 = new Crawler(url3);
+        CrawlingClient crawler3 = new CrawlingClientImpl(url3);
         crawlingText = crawlingText + crawler3.get();
         System.out.println("crawling3 length: " + crawlingText.length());
 

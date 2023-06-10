@@ -1,5 +1,6 @@
 package com.jin.crawling.application;
 
+import com.jin.crawling.infrastructure.CrawlingClient;
 import org.springframework.stereotype.Service;
 
 @Service

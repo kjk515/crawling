@@ -6,12 +6,13 @@ import java.io.IOException;
 
 public class CrawlerTest {
 
+    CrawlingClient crawlingClient;
 
     @Test
     public void getTest() throws IOException {
-        Crawler crawler = new Crawler("https://www.kia.com");
+        crawlingClient = new CrawlingClientImpl("https://www.kia.com");
 
-        String crawlingText = crawler.get();
+        String crawlingText = crawlingClient.get();
         System.out.println(crawlingText);
     }
 }
