@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.yaml.snakeyaml.util.ArrayUtils;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Getter
@@ -43,8 +45,18 @@ public class TextProcessServiceImpl implements TextProcessService {
                 return c1 - c2;
             }
             else {
-                boolean c1digit = Character.isDigit(c1);
-                return lower1 - lower2;
+                boolean c1Digit = Character.isDigit(c1);
+                boolean c2Digit = Character.isDigit(c2);
+
+                if (c1Digit == c2Digit) {
+                    return lower1 - lower2;
+                }
+                else if (c1Digit) {
+                    return 1;
+                }
+                else {
+                    return -1;
+                }
             }
         });
 
@@ -64,6 +76,53 @@ public class TextProcessServiceImpl implements TextProcessService {
 
         text = charSet.stream().map(String::valueOf).collect(Collectors.joining());
 
+        return text;
+    }
+
+    public String crossEnglishAndNum() {
+
+//        String[] englishAndNum = text.split("0");
+        Pattern pattern = Pattern.compile("[0-9]");
+        Matcher matcher = pattern.matcher(text);
+
+        boolean isFind = matcher.find();
+
+        if (!isFind || matcher.start() == 0) {
+            return text;
+        }
+
+        String englishText = text.substring(0, matcher.start());
+        String numberText = text.substring(matcher.start());
+
+        StringBuilder result = new StringBuilder();
+        result.append(englishText.charAt(0));
+        String lastChar = "";
+        int englishIndex = 1;
+        int numberIndex = 0;
+
+
+        for (int i = 0; i < englishText.length() + numberText.length() - 1; i++) {
+
+            if (englishIndex >= englishText.length()) {
+                result.append(numberText.charAt(numberIndex));
+                numberIndex++;
+            }
+            else if (numberIndex >= numberText.length()) {
+                result.append(englishText.charAt(englishIndex));
+                englishIndex++;
+            }
+            else {
+//                result.g
+
+                String englishChar = englishText.substring(englishIndex, 1);
+                String numberChar = englishText.substring(englishIndex, 1);
+            }
+        }
+
+
+        System.out.println(englishText);
+        System.out.println(numberText);
+        System.out.println(result);
         return text;
     }
 }

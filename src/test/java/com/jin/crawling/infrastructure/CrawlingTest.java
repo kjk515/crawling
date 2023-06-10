@@ -36,11 +36,12 @@ public class CrawlingTest {
         String filteredText = processor.filterEnglishAndNum();
         System.out.println("filtered length: " + filteredText.length());
 
+        String deduplicated = processor.deduplicate();
+        System.out.println("deduplicated length: " + deduplicated.length());
+
         String sortedText = processor.sortAscending();
         System.out.println("sorted length: " + sortedText.length());
 
-//        String deduplicated = processor.deduplicate();
-//        System.out.println("deduplicated length: " + deduplicated.length());
 
         System.out.println(sortedText);
     }
