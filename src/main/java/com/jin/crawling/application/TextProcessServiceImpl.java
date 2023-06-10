@@ -1,9 +1,7 @@
 package com.jin.crawling.application;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -30,8 +28,6 @@ public class TextProcessServiceImpl implements TextProcessService {
     }
 
     public String sortAscending() {
-        // TODO: 정렬을 오름차순이 아닌, 과제 기준으로 해야 함.
-//        char[] chars = text.toCharArray();
 
         Character[] chars = text.chars()
                 .mapToObj(chr -> (char) chr)
@@ -73,59 +69,64 @@ public class TextProcessServiceImpl implements TextProcessService {
 
     public String deduplicate() {
         // TODO: 조금더 효울적인 중복제거 없을까??
+        // TODO: Set을 사용하면서 Comparater를 같이 넘겨서 내맘대로 정렬을 할수는 없나?
+        System.out.println(text);
         Set<Character> charSet = text.chars()
                 .mapToObj(chr -> (char) chr)
                 .collect(Collectors.toSet());
+        System.out.println(charSet);
 
-        text = charSet.stream().map(String::valueOf).collect(Collectors.joining());
+        text = charSet.stream()
+                .map(String::valueOf)
+                .collect(Collectors.joining());
 
         return text;
     }
 
     public String crossEnglishAndNum() {
 
-//        String[] englishAndNum = text.split("0");
         Pattern pattern = Pattern.compile("[0-9]");
         Matcher matcher = pattern.matcher(text);
 
         boolean isFind = matcher.find();
+        int numberStartIndex = matcher.start();
 
-        if (!isFind || matcher.start() == 0) {
+        if (!isFind || numberStartIndex == 0) {
             return text;
         }
 
-        String englishText = text.substring(0, matcher.start());
-        String numberText = text.substring(matcher.start());
 
+        String englishText = text.substring(0, numberStartIndex);
+        String numberText = text.substring(numberStartIndex);
         StringBuilder result = new StringBuilder();
-        result.append(englishText.charAt(0));
-        String lastChar = "";
-        int englishIndex = 1;
-        int numberIndex = 0;
 
+        // TODO: 문자열 substring vs 배열 자르기
+        while (englishText.length() > 1 && numberText.length() > 0) {
 
-        for (int i = 0; i < englishText.length() + numberText.length() - 1; i++) {
+            String engChar = englishText.substring(0, 1);
+            String engChar2 = englishText.substring(1, 2);
 
-            if (englishIndex >= englishText.length()) {
-                result.append(numberText.charAt(numberIndex));
-                numberIndex++;
-            }
-            else if (numberIndex >= numberText.length()) {
-                result.append(englishText.charAt(englishIndex));
-                englishIndex++;
+            if (engChar.toLowerCase().equals(engChar2)) {
+                result.append(engChar).append(engChar2);
+                englishText = englishText.substring(2);
             }
             else {
-//                result.g
-
-                String englishChar = englishText.substring(englishIndex, 1);
-                String numberChar = englishText.substring(englishIndex, 1);
+                result.append(engChar);
+                englishText = englishText.substring(1);
             }
+
+            String numChar = numberText.substring(0, 1);
+            result.append(numChar);
+            numberText = numberText.substring(1);
         }
 
+        result.append(englishText);
 
-        System.out.println(englishText);
-        System.out.println(numberText);
-        System.out.println(result);
+        if (numberText.length() > 0) {
+            result.append(numberText);
+        }
+
+        text = result.toString();
         return text;
     }
 }
