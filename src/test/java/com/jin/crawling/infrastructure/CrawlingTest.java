@@ -1,13 +1,25 @@
 package com.jin.crawling.infrastructure;
 
 import com.jin.crawling.application.TextProcessServiceImpl;
+import com.jin.crawling.config.CrawlingProperties;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
 public class CrawlingTest {
+
+    @InjectMocks
+    private CrawlingClientImpl crawlingClient;
+
+    @Mock
+    private CrawlingProperties crawlingProperties;
 
     private final String url1 = "https://shop.hyundai.com";
     private final String url2 = "https://www.kia.com";
@@ -20,16 +32,13 @@ public class CrawlingTest {
 
         String crawlingText = "";
 
-        CrawlingClient crawler1 = new CrawlingClientImpl();
-        crawlingText = crawlingText + crawler1.getHtml(url1);
+        crawlingText = crawlingText + crawlingClient.getHtml(url1);
         System.out.println("crawling1 length: " + crawlingText.length());
 
-        CrawlingClient crawler2 = new CrawlingClientImpl();
-        crawlingText = crawlingText + crawler2.getHtml(url2);
+        crawlingText = crawlingText + crawlingClient.getHtml(url2);
         System.out.println("crawling2 length: " + crawlingText.length());
 
-        CrawlingClient crawler3 = new CrawlingClientImpl();
-        crawlingText = crawlingText + crawler3.getHtml(url3);
+        crawlingText = crawlingText + crawlingClient.getHtml(url3);
         System.out.println("crawling3 length: " + crawlingText.length());
 
         TextProcessServiceImpl processor = new TextProcessServiceImpl();

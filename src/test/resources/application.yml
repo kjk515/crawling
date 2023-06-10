@@ -3,5 +3,5 @@ thread:
   max-pool-size: 10
   queue-capacity: 10
 crawling:
-  timeout: 3000
+  timeout: 1000
   max-retry: 3

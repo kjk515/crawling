@@ -1,8 +1,8 @@
 package com.jin.crawling.infrastructure;
 
+import com.jin.crawling.config.CrawlingProperties;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
@@ -10,10 +10,10 @@ import java.io.IOException;
 @Repository
 public class CrawlingClientImpl implements CrawlingClient {
 
-    @Value("${crawling.timeout}")
-    private int timeout;
+    private final int timeout;
 
-    public CrawlingClientImpl() {
+    public CrawlingClientImpl(CrawlingProperties crawlingProperties) {
+        this.timeout = crawlingProperties.timeout();
     }
 
     @Override

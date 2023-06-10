@@ -1,6 +1,5 @@
 package com.jin.crawling.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -12,19 +11,18 @@ import java.util.concurrent.Executor;
 @Configuration
 public class AsyncConfig implements AsyncConfigurer {
 
-    @Value("${thread.core-pool-size}")
-    private int corePoolSize;
-    @Value("${thread.max-pool-size}")
-    private int maxPoolSize;
-    @Value("${thread.queue-capacity}")
-    private int queueCapacity;
+    private final AsyncProperties asyncProperties;
+
+    public AsyncConfig(AsyncProperties asyncProperties) {
+        this.asyncProperties = asyncProperties;
+    }
 
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(corePoolSize);
-        executor.setMaxPoolSize(maxPoolSize);
-        executor.setQueueCapacity(queueCapacity);
+        executor.setCorePoolSize(asyncProperties.corePoolSize());
+        executor.setMaxPoolSize(asyncProperties.maxPoolSize());
+        executor.setQueueCapacity(asyncProperties.queueCapacity());
         executor.setThreadNamePrefix("crawling-thread-");
         executor.initialize();
         return executor;

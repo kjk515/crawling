@@ -18,9 +18,8 @@ public class CrawlingServiceImpl implements CrawlingService {
 
     @Override
     @Async
-    public CompletableFuture<String> getCrawlingContent(String url) throws IOException, InterruptedException {
+    public CompletableFuture<String> getCrawlingContent(String url) throws IOException {
         System.out.println(Thread.currentThread().getName());
-        Thread.sleep(2000);
         return CompletableFuture.completedFuture(this.crawlingClient.getHtml(url));
     }
 }
