@@ -10,9 +10,9 @@ public class CrawlingClientTest {
 
     @Test
     public void getTest() throws IOException {
-        crawlingClient = new CrawlingClientImpl("https://www.kia.com");
+        crawlingClient = new CrawlingClientImpl();
 
-        String crawlingText = crawlingClient.get();
+        String crawlingText = crawlingClient.getHtml("https://www.kia.com");
         System.out.println(crawlingText);
     }
 }

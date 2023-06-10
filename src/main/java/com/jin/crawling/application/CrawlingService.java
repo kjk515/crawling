@@ -1,4 +1,9 @@
 package com.jin.crawling.application;
 
-public interface CrawlingService extends Runnable {
+import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+
+public interface CrawlingService {
+
+    CompletableFuture<String> getCrawlingContent(String url) throws IOException, InterruptedException;
 }

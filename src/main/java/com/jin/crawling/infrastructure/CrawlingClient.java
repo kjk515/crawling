@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface CrawlingClient {
 
-    public String get() throws IOException;
+    String getHtml(String url) throws IOException;
 }

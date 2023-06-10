@@ -1,6 +1,8 @@
 package com.jin.crawling.application;
 
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 import org.yaml.snakeyaml.util.ArrayUtils;
 
 import java.util.*;
@@ -8,15 +10,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Service
 @Getter
 public class TextProcessServiceImpl implements TextProcessService {
 
-    private final String originText;
+    private String originText;
 
     private String text;
 
-
-    public TextProcessServiceImpl(String originText) {
+    @Override
+    public void initTextProcessService(String originText) {
         this.originText = originText;
         this.text = originText;
     }

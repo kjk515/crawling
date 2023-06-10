@@ -10,7 +10,8 @@ public class TextProcessServiceTest {
     public void testSortAscending() {
         String originText = "html124divABCDefgtaBlelmg1";
 
-        textProcessService = new TextProcessServiceImpl(originText);
+        textProcessService = new TextProcessServiceImpl();
+        textProcessService.initTextProcessService(originText);
         String resultText = textProcessService.sortAscending();
 
         System.out.println(resultText);
@@ -21,7 +22,8 @@ public class TextProcessServiceTest {
 //        String originText = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789";
         String originText = "AaBCDdefghilmtv124";
 
-        textProcessService = new TextProcessServiceImpl(originText);
+        textProcessService = new TextProcessServiceImpl();
+        textProcessService.initTextProcessService(originText);
         String resultText = textProcessService.crossEnglishAndNum();
 
         System.out.println(resultText);

@@ -1,38 +1,24 @@
 package com.jin.crawling.infrastructure;
 
-import lombok.Getter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 
 @Repository
-@Getter
 public class CrawlingClientImpl implements CrawlingClient {
 
-//    private final TaskExecutor taskExecutor; // TODO : thread 생성과 사용로직이 store 계층에 있는것이 맞나?
-//
-//    public CrawlingClientImpl(TaskExecutor taskExecutor) {
-//        this.taskExecutor = taskExecutor;
-//    }
-//
-//    public String getCrawlingContent() {
-//        taskExecutor.execute(new MyThread());
-//
-//        return null;
-//    }
+    @Value("${crawling.timeout}")
+    private int timeout;
 
-    final private int timeout = 10 * 1000;
-    final private String url;
-
-
-    public CrawlingClientImpl(String url) {
-        this.url = url;
+    public CrawlingClientImpl() {
     }
 
-    public String get() throws IOException {
-        Connection conn = Jsoup.connect(this.url).timeout(timeout);
+    @Override
+    public String getHtml(String url) throws IOException {
+        Connection conn = Jsoup.connect(url).timeout(timeout);
         return conn.get().toString();
     }
 }
