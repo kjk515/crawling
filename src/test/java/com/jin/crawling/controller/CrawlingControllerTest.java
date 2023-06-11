@@ -25,7 +25,7 @@ public class CrawlingControllerTest {
 
     @Test
     public void testCrawling() throws Exception {
-        mvc.perform(get("/crawling"))
+        mvc.perform(get("/crawling-example"))
                         .andExpect(status().isOk());
     }
 }
