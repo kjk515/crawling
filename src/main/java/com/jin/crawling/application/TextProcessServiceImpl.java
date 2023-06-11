@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Service
 @Getter
@@ -16,10 +18,13 @@ public class TextProcessServiceImpl implements TextProcessService {
 
     private String text;
 
+    private Stream<Character> textStream;
+
     @Override
     public void initTextProcessService(String originText) {
         this.originText = originText;
         this.text = originText;
+        this.textStream = originText.chars().mapToObj(chr -> (char) chr);
     }
 
     public String filterEnglishAndNum() {
@@ -27,44 +32,73 @@ public class TextProcessServiceImpl implements TextProcessService {
         return text;
     }
 
+    public TextProcessService filterEnglishAndNumStream() {
+        textStream = textStream.filter(Character::isLetterOrDigit);
+        return this;
+    }
+
     public String sortAscending() {
 
-        Character[] chars = text.chars()
+        text = text.chars()
                 .mapToObj(chr -> (char) chr)
-                .toArray(Character[]::new);
+                .sorted((c1, c2) -> {
+                    char lower1 = Character.toLowerCase(c1);
+                    char lower2 = Character.toLowerCase(c2);
 
-        Arrays.sort(chars, (c1, c2) -> {
-            char lower1 = Character.toLowerCase(c1);
-            char lower2 = Character.toLowerCase(c2);
+                    if (lower1 == lower2) {
+                        return Character.compare(c1, c2);
+                    }
+                    else {
+                        boolean c1Digit = Character.isDigit(c1);
+                        boolean c2Digit = Character.isDigit(c2);
 
-            if (lower1 == lower2) {
-                return Character.compare(c1, c2);
-            }
-            else {
-                boolean c1Digit = Character.isDigit(c1);
-                boolean c2Digit = Character.isDigit(c2);
-
-                if (c1Digit == c2Digit) {
-                    return Character.compare(lower1, lower2);
-                }
-                else if (c1Digit) {
-                    return 1;
-                }
-                else {
-                    return -1;
-                }
-            }
-        });
-
-        // TODO: Apache Common Lang 유틸로 변경?
-        text = Arrays.stream(chars)
-                .map(Object::toString)
-                .collect(Collectors.joining());
+                        if (c1Digit == c2Digit) {
+                            return Character.compare(lower1, lower2);
+                        }
+                        else if (c1Digit) {
+                            return 1;
+                        }
+                        else {
+                            return -1;
+                        }
+                    }
+                })
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
 
         return text;
     }
 
+    public TextProcessService sortAscendingStream() {
+
+        textStream = textStream.sorted((c1, c2) -> {
+                    char lower1 = Character.toLowerCase(c1);
+                    char lower2 = Character.toLowerCase(c2);
+
+                    if (lower1 == lower2) {
+                        return Character.compare(c1, c2);
+                    }
+                    else {
+                        boolean c1Digit = Character.isDigit(c1);
+                        boolean c2Digit = Character.isDigit(c2);
+
+                        if (c1Digit == c2Digit) {
+                            return Character.compare(lower1, lower2);
+                        }
+                        else if (c1Digit) {
+                            return 1;
+                        }
+                        else {
+                            return -1;
+                        }
+                    }
+                });
+
+        return this;
+    }
+
     public String deduplicate() {
+
         // TODO: 조금더 효울적인 중복제거 없을까??
         // TODO: Set을 사용하면서 Comparater를 같이 넘겨서 내맘대로 정렬을 할수는 없나?
         System.out.println(text);
@@ -80,50 +114,132 @@ public class TextProcessServiceImpl implements TextProcessService {
         return text;
     }
 
+    public TextProcessServiceImpl deduplicateStream() {
+        textStream = textStream.distinct();
+        return this;
+    }
+
+    public TextProcessServiceImpl deduplicateStream2() {
+        textStream = textStream.collect(Collectors.toSet()).stream();
+        return this;
+    }
+
+    public TextProcessServiceImpl deduplicateStream3() {
+        textStream = textStream.collect(Collectors.toCollection(LinkedHashSet::new)).stream();
+        return this;
+    }
+
+
     public String crossEnglishAndNum() {
 
         Pattern pattern = Pattern.compile("[0-9]");
         Matcher matcher = pattern.matcher(text);
 
         boolean isFind = matcher.find();
-        int numberStartIndex = matcher.start();
 
-        if (!isFind || numberStartIndex == 0) {
+        if (!isFind || matcher.start() == 0) {
             return text;
         }
 
+        int numberStartIndex = matcher.start();
 
         String englishText = text.substring(0, numberStartIndex);
         String numberText = text.substring(numberStartIndex);
         StringBuilder result = new StringBuilder();
 
+        int engTextLength = englishText.length();
+        int numTextLength = numberText.length();
+
+        int engIndex = 0;
+        int numIndex = 0;
+
         // TODO: 문자열 substring vs 배열 자르기
-        while (englishText.length() > 1 && numberText.length() > 0) {
+        while (engIndex < engTextLength && numIndex < numTextLength) {
 
-            String engChar = englishText.substring(0, 1);
-            String engChar2 = englishText.substring(1, 2);
+            char engChar = englishText.charAt(engIndex);
+            char engChar2 = englishText.charAt(engIndex + 1);
 
-            if (engChar.toLowerCase().equals(engChar2)) {
+            if (Character.toLowerCase(engChar) == Character.toLowerCase(engChar2)) {
                 result.append(engChar).append(engChar2);
-                englishText = englishText.substring(2);
+                engIndex += 2;
             }
             else {
                 result.append(engChar);
-                englishText = englishText.substring(1);
+                engIndex += 1;
             }
 
-            String numChar = numberText.substring(0, 1);
+            char numChar = numberText.charAt(numIndex);
             result.append(numChar);
-            numberText = numberText.substring(1);
+            numIndex += 1;
         }
 
-        result.append(englishText);
-
-        if (numberText.length() > 0) {
-            result.append(numberText);
-        }
+        result.append(englishText.substring(engIndex));
+        result.append(numberText.substring(numIndex));
 
         text = result.toString();
         return text;
+    }
+
+    public String crossEnglishAndNumStream() {
+
+        Pattern pattern = Pattern.compile("[0-9]");
+        Matcher matcher = pattern.matcher(text);
+
+        boolean isFind = matcher.find();
+
+        if (!isFind || matcher.start() == 0) {
+            return text;
+        }
+
+        int numberStartIndex = matcher.start();
+
+        String englishText = text.substring(0, numberStartIndex);
+        String numberText = text.substring(numberStartIndex);
+        StringBuilder result = new StringBuilder();
+
+        int engTextLength = englishText.length();
+        int numTextLength = numberText.length();
+
+        int engIndex = 0;
+        int numIndex = 0;
+
+
+        englishText.chars().mapToObj(chr -> (char) chr).reduce((r, c) -> c);
+
+
+        // TODO: 문자열 substring vs 배열 자르기
+        while (engIndex < engTextLength && numIndex < numTextLength) {
+
+            char engChar = englishText.charAt(engIndex);
+            char engChar2 = englishText.charAt(engIndex + 1);
+
+            if (Character.toLowerCase(engChar) == Character.toLowerCase(engChar2)) {
+                result.append(engChar).append(engChar2);
+                engIndex += 2;
+            }
+            else {
+                result.append(engChar);
+                engIndex += 1;
+            }
+
+            char numChar = numberText.charAt(numIndex);
+            result.append(numChar);
+            numIndex += 1;
+        }
+
+        result.append(englishText.substring(engIndex));
+        result.append(numberText.substring(numIndex));
+
+        text = result.toString();
+        return text;
+    }
+
+    public String buildString() {
+
+        // TODO: vs .map(String::valueOf).collect(Collectors.joining());
+
+        return textStream
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
     }
 }
