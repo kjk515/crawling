@@ -1,17 +1,16 @@
 package com.jin.crawling.application;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 public class CrawlingServiceImpl implements CrawlingService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
     private final CrawlingClient crawlingClient;
 
     public CrawlingServiceImpl(CrawlingClient crawlingClient) {

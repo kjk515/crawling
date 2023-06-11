@@ -2,8 +2,10 @@ package com.jin.crawling.infrastructure;
 
 import com.jin.crawling.application.CrawlingClient;
 import com.jin.crawling.config.CrawlingProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,6 +13,7 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+@Slf4j
 @Component
 public class CrawlingClientImpl implements CrawlingClient {
 
@@ -26,7 +29,9 @@ public class CrawlingClientImpl implements CrawlingClient {
     }
 
     @Override
+    @Cacheable(cacheNames = "crawling", key = "#url")
     public String getHtml(String url) {
+        log.info("getHtml " + Thread.currentThread().getName());
         Document document = null;
         try {
             document = Jsoup.connect(url).timeout(timeout).get();
