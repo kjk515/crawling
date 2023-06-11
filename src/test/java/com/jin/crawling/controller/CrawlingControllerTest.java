@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -22,9 +21,9 @@ public class CrawlingControllerTest {
     @Autowired
     private CrawlingController crawlingController;
 
-    private final String url1 = "https://shop.hyundai.com";
-    private final String url2 = "https://www.kia.com";
-    private final String url3 = "https://www.genesis.com";
+    private static final String URL1 = "https://shop.hyundai.com";
+    private static final String URL2 = "https://www.kia.com";
+    private static final String URL3 = "https://www.genesis.com";
 
     @Test
     public void testCrawling() throws Exception {
@@ -34,6 +33,6 @@ public class CrawlingControllerTest {
 
     @Test
     public void testCrawlInParallel() {
-        List<String> contentList = crawlingController.crawlInParallel(List.of(url1, url2, url3));
+        crawlingController.crawlInParallel(List.of(URL1, URL2, URL3));
     }
 }
