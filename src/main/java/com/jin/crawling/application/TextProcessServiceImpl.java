@@ -15,67 +15,22 @@ public class TextProcessServiceImpl implements TextProcessService {
 
     private final int MIN_PARALLEL_SIZE = 100_000;
 
-    private String originText;
-
     private String text;
-
     private Stream<Character> textStream;
 
     @Override
-    public void initTextProcessService(String originText) {
-        this.originText = originText;
-        this.text = originText;
+    public TextProcessService initTextProcessService(String text) {
 
-        this.textStream = originText.chars().mapToObj(chr -> (char) chr);
+        String replacedText = text.replaceAll("[^0-9a-zA-Z]", "");
+        this.textStream = this.toStream(replacedText);
 
         if (text.length() > MIN_PARALLEL_SIZE) {
             this.textStream = this.textStream.parallel();
         }
-    }
-
-    public String filterEnglishAndNum() {
-        this.text = text.replaceAll("[^0-9a-zA-Z]", "");
-        return text;
-    }
-
-    public TextProcessServiceImpl filterEnglishAndNumStream() {
-        textStream = textStream.filter(Character::isLetterOrDigit);
         return this;
     }
 
-    public String sortAscending() {
-
-        text = text.chars()
-                .mapToObj(chr -> (char) chr)
-                .sorted((c1, c2) -> {
-                    char lower1 = Character.toLowerCase(c1);
-                    char lower2 = Character.toLowerCase(c2);
-
-                    if (lower1 == lower2) {
-                        return Character.compare(c1, c2);
-                    }
-                    else {
-                        boolean c1Digit = Character.isDigit(c1);
-                        boolean c2Digit = Character.isDigit(c2);
-
-                        if (c1Digit == c2Digit) {
-                            return Character.compare(lower1, lower2);
-                        }
-                        else if (c1Digit) {
-                            return 1;
-                        }
-                        else {
-                            return -1;
-                        }
-                    }
-                })
-                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
-                .toString();
-
-        return text;
-    }
-
-    public TextProcessServiceImpl sortAscendingStream() {
+    public TextProcessServiceImpl sort() {
 
         textStream = textStream.sorted((c1, c2) -> {
                     char lower1 = Character.toLowerCase(c1);
@@ -103,36 +58,14 @@ public class TextProcessServiceImpl implements TextProcessService {
         return this;
     }
 
-    public String deduplicate() {
-
-        Set<Character> charSet = text.chars()
-                .mapToObj(chr -> (char) chr)
-                .collect(Collectors.toSet());
-
-        text = charSet.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining());
-
-        return text;
-    }
-
-    public TextProcessServiceImpl deduplicateStream() {
+    public TextProcessServiceImpl deduplicate() {
         textStream = textStream.distinct();
         return this;
     }
 
-    public TextProcessServiceImpl deduplicateStream2() {
-        textStream = textStream.collect(Collectors.toSet()).stream();
-        return this;
-    }
+    public TextProcessService crossEnglishAndNum() {
 
-    public TextProcessServiceImpl deduplicateStream3() {
-        textStream = textStream.collect(Collectors.toCollection(LinkedHashSet::new)).stream();
-        return this;
-    }
-
-
-    public String crossEnglishAndNum() {
+        this.text = this.buildString();
 
         Pattern pattern = Pattern.compile("[0-9]");
         Matcher matcher = pattern.matcher(text);
@@ -140,8 +73,9 @@ public class TextProcessServiceImpl implements TextProcessService {
         boolean isFind = matcher.find();
 
         if (!isFind || matcher.start() == 0) {
-            return text;
+            return this;
         }
+
 
         int numberStartIndex = matcher.start();
 
@@ -149,13 +83,16 @@ public class TextProcessServiceImpl implements TextProcessService {
         String numberText = text.substring(numberStartIndex);
         StringBuilder result = new StringBuilder();
 
+        System.out.println(this.text);
+        System.out.println(englishText);
+        System.out.println(numberText);
+
         int engTextLength = englishText.length();
         int numTextLength = numberText.length();
 
         int engIndex = 0;
         int numIndex = 0;
 
-        // TODO: 문자열 substring vs 배열 자르기
         while (engIndex < engTextLength && numIndex < numTextLength) {
 
             char engChar = englishText.charAt(engIndex);
@@ -178,17 +115,17 @@ public class TextProcessServiceImpl implements TextProcessService {
         result.append(englishText.substring(engIndex));
         result.append(numberText.substring(numIndex));
 
-        text = result.toString();
-        return text;
+        this.textStream = toStream(result.toString());
+        return this;
     }
 
     public String buildString() {
-
-        // TODO: vs .map(String::valueOf).collect(Collectors.joining());
-//        return textStream.map(String::valueOf).collect(Collectors.joining());
-
         return textStream
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
+    }
+
+    private Stream<Character> toStream(String text) {
+        return text.chars().mapToObj(chr -> (char) chr);
     }
 }

@@ -21,7 +21,6 @@ public class TextProcessServicePerformanceTest {
     @BeforeEach
     public void before() {
         textProcessService = new TextProcessServiceImpl();
-//        crawlingText = crawlingClient.getHtml("https://shop.hyundai.com");
         crawlingText = crawlingClient.getHtml("https://www.kia.com");
         System.out.println("crawling length: " + crawlingText.length() + "=================");
     }
@@ -68,17 +67,15 @@ public class TextProcessServicePerformanceTest {
 
     public void testTextProcessString() {
         testBeforeMethod();
-        textProcessService.filterEnglishAndNum();
-        textProcessService.sortAscending();
+        textProcessService.sort();
         textProcessService.deduplicate();
     }
 
     public void testTextProcessStream() {
         testBeforeMethod();
         textProcessService
-                .filterEnglishAndNumStream()
-                .sortAscendingStream()
-                .deduplicateStream()
+                .sort()
+                .deduplicate()
                 .buildString();
     }
 
@@ -86,85 +83,48 @@ public class TextProcessServicePerformanceTest {
     @Test
     public void testFilter() {
 
-        int loopCount = 100;
+        int loopCount = 500;
         filterPrepare();
 
-        // Winner
-        startTime("filter stream");
-        for (int i = 0; i < loopCount; i++) {
-            testFilterEnglishAndNumStream();
-        }
-        endTime();
-
+        // 987ms
         startTime("filter");
         for (int i = 0; i < loopCount; i++) {
-            testFilterEnglishAndNum();
+            filterEnglishAndNum();
         }
         endTime();
     }
 
     public void filterPrepare() {
-        testFilterEnglishAndNum();
-        testFilterEnglishAndNumStream();
+        filterEnglishAndNum();
     }
 
-    public void testFilterEnglishAndNum() {
+    public void filterEnglishAndNum() {
         testBeforeMethod();
-        textProcessService.filterEnglishAndNum();
-    }
-
-    public void testFilterEnglishAndNumStream() {
-        testBeforeMethod();
-        textProcessService.filterEnglishAndNumStream().buildString();
     }
 
     @Test
     public void testDeduplicate() {
 
-        int loopCount = 100;
+        int loopCount = 2000;
         deduplicatePrepare();
 
 
-        // Winner
+        // Winner, 1731ms
         startTime("deduplicate stream");
         for (int i = 0; i < loopCount; i++) {
-            testDeduplicateStream();
-        }
-        endTime();
-
-        startTime("deduplicate stream 2");
-        for (int i = 0; i < loopCount; i++) {
-            testDeduplicateStream2();
-        }
-        endTime();
-
-        startTime("deduplicate stream 3");
-        for (int i = 0; i < loopCount; i++) {
-            testDeduplicateStream3();
+            deduplicateStream();
         }
         endTime();
     }
 
     public void deduplicatePrepare() {
         startTime("prepare");
-        testDeduplicateStream();
-        testDeduplicateStream2();
-        testDeduplicateStream3();
+        deduplicateStream();
         endTime();
     }
 
-    public void testDeduplicateStream() {
+    public void deduplicateStream() {
         testBeforeMethod();
-        textProcessService.deduplicateStream().buildString();
-    }
-
-    public void testDeduplicateStream2() {
-        testBeforeMethod();
-        textProcessService.deduplicateStream2().buildString();
-    }
-
-    public void testDeduplicateStream3() {
-        testBeforeMethod();
-        textProcessService.deduplicateStream3().buildString();
+        textProcessService.deduplicate().buildString();
     }
 }

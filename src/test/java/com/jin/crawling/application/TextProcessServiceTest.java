@@ -24,10 +24,11 @@ public class TextProcessServiceTest {
     @Parameters({
             "<script>812yeh98qw hed0q   23</script>?~@#$^${}[]안녕하세요!, script812yeh98qwhed0q23script",
     })
-    public void testFilterEnglishAndNum(String originText, String expected) {
+    public void testInitAndFilter(String text, String expected) {
 
-        textProcessService.initTextProcessService(originText);
-        String resultText = textProcessService.filterEnglishAndNum();
+        String resultText = textProcessService
+                .initTextProcessService(text)
+                .buildString();
 
         assertEquals(expected, resultText);
     }
@@ -39,22 +40,10 @@ public class TextProcessServiceTest {
             "AcbBa, AaBbc",
             ",",
     })
-    public void testSortAscending(String originText, String expected) {
+    public void testSortAscending(String text, String expected) {
 
-        textProcessService.initTextProcessService(originText);
-        String resultText = textProcessService.sortAscending();
-
-        assertEquals(expected, resultText);
-    }
-
-    @Test
-    @Parameters({
-            "html124divABCDefgtaBlelmg1, AaBCdDefghilmtv124",
-    })
-    public void testDeduplicate(String originText, String expected) {
-
-        textProcessService.initTextProcessService(originText);
-        String resultText = textProcessService.deduplicate();
+        textProcessService.initTextProcessService(text);
+        String resultText = textProcessService.sort().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -63,22 +52,10 @@ public class TextProcessServiceTest {
     @Parameters({
             "html124divABCDefgtaBlelmg1, html124divABCDefga",
     })
-    public void testDeduplicateStream(String originText, String expected) {
+    public void testDeduplicate(String text, String expected) {
 
-        textProcessService.initTextProcessService(originText);
-        String resultText = textProcessService.deduplicateStream().buildString();
-
-        assertEquals(expected, resultText);
-    }
-
-    @Test
-    @Parameters({
-            "html124divABCDefgtaBlelmg1, html124divABCDefga",
-    })
-    public void testDeduplicateStream3(String originText, String expected) {
-
-        textProcessService.initTextProcessService(originText);
-        String resultText = textProcessService.deduplicateStream3().buildString();
+        textProcessService.initTextProcessService(text);
+        String resultText = textProcessService.deduplicate().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -91,10 +68,10 @@ public class TextProcessServiceTest {
             "1358, 1358",
             ",",
     })
-    public void testCrossEnglishAndNum(String originText, String expected) {
+    public void testCrossEnglishAndNum(String text, String expected) {
 
-        textProcessService.initTextProcessService(originText);
-        String resultText = textProcessService.crossEnglishAndNum();
+        textProcessService.initTextProcessService(text);
+        String resultText = textProcessService.crossEnglishAndNum().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -103,14 +80,15 @@ public class TextProcessServiceTest {
     @Parameters({
             "<script>812yeh98qw hed0q   23</script>?~@#$^${}[]안녕하세요!, c0d1e2h3i8p9qrstwy"
     })
-    public void testTextProcess(String originText, String expected) {
+    public void testTextProcess(String text, String expected) {
 
-        textProcessService.initTextProcessService(originText);
+        textProcessService.initTextProcessService(text);
 
-        textProcessService.filterEnglishAndNum();
-        textProcessService.deduplicate();
-        textProcessService.sortAscending();
-        String resultText = textProcessService.crossEnglishAndNum();
+        String resultText = textProcessService
+                .sort()
+                .deduplicate()
+                .crossEnglishAndNum()
+                .buildString();
 
         assertEquals(expected, resultText);
     }
