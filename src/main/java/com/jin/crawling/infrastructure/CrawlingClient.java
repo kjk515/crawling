@@ -1,6 +1,5 @@
 package com.jin.crawling.infrastructure;
 
-import com.jin.crawling.application.CrawlingClient;
 import com.jin.crawling.config.CrawlingProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -14,7 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 @Component
-public class CrawlingClientImpl implements CrawlingClient {
+public class CrawlingClient {
 
     private final int timeout;
     private final int maxRetry;
@@ -23,12 +22,11 @@ public class CrawlingClientImpl implements CrawlingClient {
     private static final int INIT_WAITING_TIME = 100;
 
 
-    public CrawlingClientImpl(CrawlingProperties crawlingProperties) {
+    public CrawlingClient(CrawlingProperties crawlingProperties) {
         this.timeout = crawlingProperties.timeout();
         this.maxRetry = crawlingProperties.maxRetry();
     }
 
-    @Override
     @Cacheable(cacheNames = "crawling", key = "#url")
     public String getHtml(String url) {
         log.info("getHtml called!");

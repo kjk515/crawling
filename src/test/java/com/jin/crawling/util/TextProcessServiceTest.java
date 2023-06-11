@@ -1,8 +1,7 @@
-package com.jin.crawling.application;
+package com.jin.crawling.util;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -12,23 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(JUnitParamsRunner.class)
 public class TextProcessServiceTest {
 
-    private TextProcessService textProcessService;
-
-
-    @Before
-    public void before() {
-        textProcessService = new TextProcessServiceImpl();
-    }
-
-
     @Test
     @Parameters({
             "<script>812yeh98qw hed0q   23</script>?~@#$^${}[]안녕하세요!, script812yeh98qwhed0q23script",
     })
     public void testInitAndFilter(String text, String expected) {
 
-        String resultText = textProcessService
-                .initTextProcessService(text)
+        String resultText = TextProcessor
+                .parsedTextProcessor(text)
                 .buildString();
 
         assertEquals(expected, resultText);
@@ -43,8 +33,8 @@ public class TextProcessServiceTest {
     })
     public void testSortAscending(String text, String expected) {
 
-        textProcessService.initTextProcessService(text);
-        String resultText = textProcessService.sort().buildString();
+        String resultText = TextProcessor
+                .parsedTextProcessor(text).sort().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -55,8 +45,8 @@ public class TextProcessServiceTest {
     })
     public void testDeduplicate(String text, String expected) {
 
-        textProcessService.initTextProcessService(text);
-        String resultText = textProcessService.distinct().buildString();
+        String resultText = TextProcessor
+                .parsedTextProcessor(text).distinct().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -71,8 +61,8 @@ public class TextProcessServiceTest {
     })
     public void testCrossEnglishAndNum(String text, String expected) {
 
-        textProcessService.initTextProcessService(text);
-        String resultText = textProcessService.crossEnglishAndNum().buildString();
+        String resultText = TextProcessor
+                .parsedTextProcessor(text).crossEnglishAndNum().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -83,9 +73,8 @@ public class TextProcessServiceTest {
     })
     public void testTextProcess(String text, String expected) {
 
-        textProcessService.initTextProcessService(text);
-
-        String resultText = textProcessService
+        String resultText = TextProcessor
+                .parsedTextProcessor(text)
                 .sort()
                 .distinct()
                 .crossEnglishAndNum()

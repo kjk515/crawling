@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CrawlingClientTest {
 
     @Autowired
-    private CrawlingClientImpl crawlingClient;
+    private CrawlingClient crawlingClient;
 
     private static final String URL1 = "https://shop.hyundai.com";
     private static final String URL2 = "https://www.kia.com";

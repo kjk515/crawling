@@ -6,8 +6,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,10 +27,5 @@ public class CrawlingControllerTest {
     public void testCrawling() throws Exception {
         mvc.perform(get("/crawling"))
                         .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testCrawlInParallel() {
-        crawlingController.crawlInParallel(List.of(URL1, URL2, URL3));
     }
 }

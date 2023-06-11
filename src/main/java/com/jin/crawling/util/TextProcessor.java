@@ -1,33 +1,32 @@
-package com.jin.crawling.application;
+package com.jin.crawling.util;
 
 import lombok.Getter;
-import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-@Service
 @Getter
-public class TextProcessServiceImpl implements TextProcessService {
+public class TextProcessor {
 
     private final int MIN_PARALLEL_SIZE = 100_000;
 
     private Stream<Character> textStream;
 
-    @Override
-    public TextProcessService initTextProcessService(String text) {
 
-        String replacedText = text.replaceAll("[^0-9a-zA-Z]", "");
-        this.textStream = this.toStream(replacedText);
+    public static TextProcessor parsedTextProcessor(String text) {
+        return new TextProcessor(TextProcessor.parse(text));
+    }
+
+    private TextProcessor(String text) {
+        this.textStream = this.toStream(text);
 
         if (text.length() > MIN_PARALLEL_SIZE) {
             this.textStream = this.textStream.parallel();
         }
-        return this;
     }
 
-    public TextProcessServiceImpl sort() {
+    public TextProcessor sort() {
 
         textStream = textStream.sorted((c1, c2) -> {
                     char lower1 = Character.toLowerCase(c1);
@@ -55,12 +54,12 @@ public class TextProcessServiceImpl implements TextProcessService {
         return this;
     }
 
-    public TextProcessServiceImpl distinct() {
+    public TextProcessor distinct() {
         textStream = textStream.distinct();
         return this;
     }
 
-    public TextProcessService crossEnglishAndNum() {
+    public TextProcessor crossEnglishAndNum() {
 
         String text = this.buildString();
 
@@ -121,5 +120,9 @@ public class TextProcessServiceImpl implements TextProcessService {
 
     private Stream<Character> toStream(String text) {
         return text.chars().mapToObj(chr -> (char) chr);
+    }
+
+    private static String parse(String text) {
+        return text.replaceAll("[^0-9a-zA-Z]", "");
     }
 }

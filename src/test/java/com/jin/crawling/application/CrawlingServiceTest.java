@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -19,10 +18,7 @@ public class CrawlingServiceTest {
     private final String url3 = "https://www.genesis.com";
 
     @Test
-    public void testGetCrawlingContent() throws IOException, ExecutionException, InterruptedException {
-        // given
-//        given(crawlingClient.getHtml(any())).willReturn("html124divABCDefgtaBlelmg1");
-
+    public void testGetCrawlingContent() throws ExecutionException, InterruptedException {
         // when
         CompletableFuture<String> crawlingContent1 = crawlingService.getCrawlingContent(url1);
         CompletableFuture<String> crawlingContent2 = crawlingService.getCrawlingContent(url2);
