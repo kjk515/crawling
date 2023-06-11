@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -19,8 +18,9 @@ public class CrawlingServiceImpl implements CrawlingService {
 
     @Override
     @Async
-    public CompletableFuture<String> getCrawlingContent(String url) throws IOException {
-        log.info(Thread.currentThread().getName());
+    public CompletableFuture<String> getCrawlingContent(String url) {
+        log.info("Thread name : ${}", Thread.currentThread().getName());
+
         return CompletableFuture.completedFuture(this.crawlingClient.getHtml(url));
     }
 }

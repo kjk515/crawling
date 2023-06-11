@@ -4,7 +4,6 @@ import com.jin.crawling.application.CrawlingClient;
 import com.jin.crawling.config.CrawlingProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +18,7 @@ public class CrawlingClientImpl implements CrawlingClient {
 
     private final int timeout;
     private final int maxRetry;
+
     private final ConcurrentMap<String, Integer> retryCount = new ConcurrentHashMap<>();
     private static final int INIT_WAITING_TIME = 100;
 
@@ -31,19 +31,18 @@ public class CrawlingClientImpl implements CrawlingClient {
     @Override
     @Cacheable(cacheNames = "crawling", key = "#url")
     public String getHtml(String url) {
-        log.info("getHtml " + Thread.currentThread().getName());
-        Document document = null;
+        log.info("getHtml called!");
+
         try {
-            document = Jsoup.connect(url).timeout(timeout).get();
+            return Jsoup.connect(url).timeout(timeout).get().toString();
         } catch (SocketTimeoutException e) {
-            this.handleTimeout(url, e);
+            return this.handleTimeout(url, e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return document.toString();
     }
 
-    private void handleTimeout(String url, SocketTimeoutException timeoutException) {
+    private String handleTimeout(String url, SocketTimeoutException timeoutException) {
         retryCount.putIfAbsent(url, 0);
         int count = retryCount.get(url);
 
@@ -54,7 +53,7 @@ public class CrawlingClientImpl implements CrawlingClient {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            this.getHtml(url);
+            return this.getHtml(url);
         } else {
             throw new RuntimeException(timeoutException);
         }

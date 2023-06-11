@@ -5,7 +5,6 @@ import com.jin.crawling.application.TextProcessService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -21,18 +20,12 @@ public class CrawlingController {
     }
 
     @GetMapping("/crawling")
-    public CrossedContent crawling() {
-        return new CrossedContent();
+    public String crawling() {
+        return "test";
     }
 
     public List<String> crawlInParallel(List<String> urls) {
-        List<CompletableFuture<String>> completableFutures = urls.stream().map(url -> {
-            try {
-                return this.crawlingService.getCrawlingContent(url);
-            } catch (IOException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
+        List<CompletableFuture<String>> completableFutures = urls.stream().map(this.crawlingService::getCrawlingContent).toList();
 
         return completableFutures.stream().map(CompletableFuture::join).toList();
     }
