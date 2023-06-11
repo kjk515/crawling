@@ -1,5 +1,6 @@
 package com.jin.crawling.infrastructure;
 
+import com.jin.crawling.application.CrawlingClient;
 import com.jin.crawling.config.CrawlingProperties;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
