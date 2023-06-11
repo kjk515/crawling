@@ -37,18 +37,15 @@ public class TextProcessServiceImpl implements TextProcessService {
             char lower1 = Character.toLowerCase(c1);
             char lower2 = Character.toLowerCase(c2);
 
-            if (c1.equals(c2)) {
-                return 0;
-            }
-            else if (lower1 == lower2) {
-                return c1 - c2;
+            if (lower1 == lower2) {
+                return Character.compare(c1, c2);
             }
             else {
                 boolean c1Digit = Character.isDigit(c1);
                 boolean c2Digit = Character.isDigit(c2);
 
                 if (c1Digit == c2Digit) {
-                    return lower1 - lower2;
+                    return Character.compare(lower1, lower2);
                 }
                 else if (c1Digit) {
                     return 1;
@@ -62,7 +59,7 @@ public class TextProcessServiceImpl implements TextProcessService {
         // TODO: Apache Common Lang 유틸로 변경?
         text = Arrays.stream(chars)
                 .map(Object::toString)
-                .collect( Collectors.joining() );
+                .collect(Collectors.joining());
 
         return text;
     }
