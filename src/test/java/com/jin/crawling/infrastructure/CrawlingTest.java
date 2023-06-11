@@ -3,22 +3,20 @@ package com.jin.crawling.infrastructure;
 import com.jin.crawling.application.TextProcessServiceImpl;
 import com.jin.crawling.config.CrawlingProperties;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest // TODO
 public class CrawlingTest {
 
-    @InjectMocks
+    @Autowired
     private CrawlingClientImpl crawlingClient;
 
-    @Mock
+    @Autowired
     private CrawlingProperties crawlingProperties;
 
     private final String url1 = "https://shop.hyundai.com";
