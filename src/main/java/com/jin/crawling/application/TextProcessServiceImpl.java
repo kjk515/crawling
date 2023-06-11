@@ -7,12 +7,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
 @Getter
 public class TextProcessServiceImpl implements TextProcessService {
+
+    private final int MIN_PARALLEL_SIZE = 100_000;
 
     private String originText;
 
@@ -24,7 +25,12 @@ public class TextProcessServiceImpl implements TextProcessService {
     public void initTextProcessService(String originText) {
         this.originText = originText;
         this.text = originText;
+
         this.textStream = originText.chars().mapToObj(chr -> (char) chr);
+
+        if (text.length() > MIN_PARALLEL_SIZE) {
+            this.textStream = this.textStream.parallel();
+        }
     }
 
     public String filterEnglishAndNum() {
@@ -99,8 +105,6 @@ public class TextProcessServiceImpl implements TextProcessService {
 
     public String deduplicate() {
 
-        // TODO: 조금더 효울적인 중복제거 없을까??
-        // TODO: Set을 사용하면서 Comparater를 같이 넘겨서 내맘대로 정렬을 할수는 없나?
         Set<Character> charSet = text.chars()
                 .mapToObj(chr -> (char) chr)
                 .collect(Collectors.toSet());
@@ -181,6 +185,7 @@ public class TextProcessServiceImpl implements TextProcessService {
     public String buildString() {
 
         // TODO: vs .map(String::valueOf).collect(Collectors.joining());
+//        return textStream.map(String::valueOf).collect(Collectors.joining());
 
         return textStream
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)

@@ -21,7 +21,8 @@ public class TextProcessServicePerformanceTest {
     @BeforeEach
     public void before() {
         textProcessService = new TextProcessServiceImpl();
-        crawlingText = crawlingClient.getHtml("https://shop.hyundai.com");
+//        crawlingText = crawlingClient.getHtml("https://shop.hyundai.com");
+        crawlingText = crawlingClient.getHtml("https://www.kia.com");
         System.out.println("crawling length: " + crawlingText.length() + "=================");
     }
 
@@ -38,6 +39,49 @@ public class TextProcessServicePerformanceTest {
     public void endTime() {
         System.out.println("End : " + (System.currentTimeMillis() - currentTime));
     }
+
+
+    @Test
+    public void testTextProcess() {
+        int loopCount = 1;
+        textProcessPrepare();
+
+        startTime("textProcess String");
+        for (int i = 0; i < loopCount; i++) {
+            testTextProcessString();
+        }
+        endTime();
+
+        startTime("textProcess Stream");
+        for (int i = 0; i < loopCount; i++) {
+            testTextProcessStream();
+        }
+        endTime();
+    }
+
+    public void textProcessPrepare() {
+        startTime("prepare");
+        testTextProcessString();
+        testTextProcessStream();
+        endTime();
+    }
+
+    public void testTextProcessString() {
+        testBeforeMethod();
+        textProcessService.filterEnglishAndNum();
+        textProcessService.sortAscending();
+        textProcessService.deduplicate();
+    }
+
+    public void testTextProcessStream() {
+        testBeforeMethod();
+        textProcessService
+                .filterEnglishAndNumStream()
+                .sortAscendingStream()
+                .deduplicateStream()
+                .buildString();
+    }
+
 
     @Test
     public void testFilter() {
@@ -60,9 +104,8 @@ public class TextProcessServicePerformanceTest {
     }
 
     public void filterPrepare() {
-        testBeforeMethod();
-        textProcessService.filterEnglishAndNum();
-        textProcessService.filterEnglishAndNumStream().buildString();
+        testFilterEnglishAndNum();
+        testFilterEnglishAndNumStream();
     }
 
     public void testFilterEnglishAndNum() {
@@ -104,20 +147,10 @@ public class TextProcessServicePerformanceTest {
 
     public void deduplicatePrepare() {
         startTime("prepare");
-        testBeforeMethod();
-        textProcessService.deduplicate();
-        testBeforeMethod();
-        textProcessService.deduplicateStream().buildString();
-        testBeforeMethod();
-        textProcessService.deduplicateStream2().buildString();
-        testBeforeMethod();
-        textProcessService.deduplicateStream3().buildString();
+        testDeduplicateStream();
+        testDeduplicateStream2();
+        testDeduplicateStream3();
         endTime();
-    }
-
-    public void testDeduplicateText() {
-        testBeforeMethod();
-        textProcessService.deduplicate();
     }
 
     public void testDeduplicateStream() {
