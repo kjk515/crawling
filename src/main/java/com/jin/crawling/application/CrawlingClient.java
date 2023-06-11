@@ -1,4 +1,4 @@
-package com.jin.crawling.infrastructure;
+package com.jin.crawling.application;
 
 import java.io.IOException;
 

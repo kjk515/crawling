@@ -18,10 +18,11 @@ ext {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.projectlombok:lombok:1.18.28'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.jsoup:jsoup:1.16.1'
+	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.5'
+    implementation 'org.projectlombok:lombok:1.18.28'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'pl.pragmatists:JUnitParams:1.1.1'

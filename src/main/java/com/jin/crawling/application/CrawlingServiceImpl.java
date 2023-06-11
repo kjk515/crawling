@@ -1,6 +1,5 @@
 package com.jin.crawling.application;
 
-import com.jin.crawling.infrastructure.CrawlingClient;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
