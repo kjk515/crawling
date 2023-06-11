@@ -1,7 +1,5 @@
 package com.jin.crawling.application;
 
-import com.jin.crawling.infrastructure.CrawlingClientImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class TextProcessServicePerformanceTest {
 
-    private TextProcessServiceImpl textProcessService;
+    private TextProcessService textProcessService;
 
     @Autowired
-    private CrawlingClientImpl crawlingClient;
+    private CrawlingClient crawlingClient;
 
     long currentTime;
     String crawlingText;

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RunWith(JUnitParamsRunner.class)
 public class TextProcessServiceTest {
 
-    private TextProcessServiceImpl textProcessService;
+    private TextProcessService textProcessService;
 
 
     @Before
