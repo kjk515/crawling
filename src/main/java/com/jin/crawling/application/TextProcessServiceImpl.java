@@ -32,7 +32,7 @@ public class TextProcessServiceImpl implements TextProcessService {
         return text;
     }
 
-    public TextProcessService filterEnglishAndNumStream() {
+    public TextProcessServiceImpl filterEnglishAndNumStream() {
         textStream = textStream.filter(Character::isLetterOrDigit);
         return this;
     }
@@ -69,7 +69,7 @@ public class TextProcessServiceImpl implements TextProcessService {
         return text;
     }
 
-    public TextProcessService sortAscendingStream() {
+    public TextProcessServiceImpl sortAscendingStream() {
 
         textStream = textStream.sorted((c1, c2) -> {
                     char lower1 = Character.toLowerCase(c1);
@@ -101,11 +101,9 @@ public class TextProcessServiceImpl implements TextProcessService {
 
         // TODO: 조금더 효울적인 중복제거 없을까??
         // TODO: Set을 사용하면서 Comparater를 같이 넘겨서 내맘대로 정렬을 할수는 없나?
-        System.out.println(text);
         Set<Character> charSet = text.chars()
                 .mapToObj(chr -> (char) chr)
                 .collect(Collectors.toSet());
-        System.out.println(charSet);
 
         text = charSet.stream()
                 .map(String::valueOf)
@@ -152,60 +150,6 @@ public class TextProcessServiceImpl implements TextProcessService {
 
         int engIndex = 0;
         int numIndex = 0;
-
-        // TODO: 문자열 substring vs 배열 자르기
-        while (engIndex < engTextLength && numIndex < numTextLength) {
-
-            char engChar = englishText.charAt(engIndex);
-            char engChar2 = englishText.charAt(engIndex + 1);
-
-            if (Character.toLowerCase(engChar) == Character.toLowerCase(engChar2)) {
-                result.append(engChar).append(engChar2);
-                engIndex += 2;
-            }
-            else {
-                result.append(engChar);
-                engIndex += 1;
-            }
-
-            char numChar = numberText.charAt(numIndex);
-            result.append(numChar);
-            numIndex += 1;
-        }
-
-        result.append(englishText.substring(engIndex));
-        result.append(numberText.substring(numIndex));
-
-        text = result.toString();
-        return text;
-    }
-
-    public String crossEnglishAndNumStream() {
-
-        Pattern pattern = Pattern.compile("[0-9]");
-        Matcher matcher = pattern.matcher(text);
-
-        boolean isFind = matcher.find();
-
-        if (!isFind || matcher.start() == 0) {
-            return text;
-        }
-
-        int numberStartIndex = matcher.start();
-
-        String englishText = text.substring(0, numberStartIndex);
-        String numberText = text.substring(numberStartIndex);
-        StringBuilder result = new StringBuilder();
-
-        int engTextLength = englishText.length();
-        int numTextLength = numberText.length();
-
-        int engIndex = 0;
-        int numIndex = 0;
-
-
-        englishText.chars().mapToObj(chr -> (char) chr).reduce((r, c) -> c);
-
 
         // TODO: 문자열 substring vs 배열 자르기
         while (engIndex < engTextLength && numIndex < numTextLength) {

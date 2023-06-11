@@ -8,5 +8,5 @@ thread:
   queue-capacity: 10
 
 crawling:
-  timeout: 3000
+  timeout: 10000
   max-retry: 3
