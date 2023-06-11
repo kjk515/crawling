@@ -3,6 +3,8 @@ package com.jin.crawling.application;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -11,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class TextProcessServicePerformanceTest {
 
+    private static final Logger log = LoggerFactory.getLogger(TextProcessServicePerformanceTest.class);
     private TextProcessService textProcessService;
 
     @Autowired
@@ -24,7 +27,7 @@ public class TextProcessServicePerformanceTest {
     public void before() {
         textProcessService = new TextProcessServiceImpl();
         crawlingText = crawlingClient.getHtml("https://www.kia.com");
-        System.out.println("crawling length: " + crawlingText.length() + "=================");
+        log.info("crawling length: {} =================", crawlingText.length());
     }
 
     public void beforeMethod() {
@@ -33,12 +36,12 @@ public class TextProcessServicePerformanceTest {
     }
 
     public void startTime(String name) {
-        System.out.println("Start " + name + " ------------");
+        log.info("Start {} ------------", name);
         currentTime = System.currentTimeMillis();
     }
 
     public void endTime() {
-        System.out.println("End : " + (System.currentTimeMillis() - currentTime));
+        log.info("End : {}", System.currentTimeMillis() - currentTime);
     }
 
 
