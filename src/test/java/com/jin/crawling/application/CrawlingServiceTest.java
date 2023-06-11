@@ -32,7 +32,5 @@ public class CrawlingServiceTest {
         String content1 = crawlingContent1.get();
         String content2 = crawlingContent2.get();
         String content3 = crawlingContent3.get();
-
-        System.out.println(content1);
     }
 }
