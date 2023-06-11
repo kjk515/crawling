@@ -3,10 +3,8 @@ package com.jin.crawling.application;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -15,7 +13,6 @@ public class TextProcessServiceImpl implements TextProcessService {
 
     private final int MIN_PARALLEL_SIZE = 100_000;
 
-    private String text;
     private Stream<Character> textStream;
 
     @Override
@@ -58,14 +55,14 @@ public class TextProcessServiceImpl implements TextProcessService {
         return this;
     }
 
-    public TextProcessServiceImpl deduplicate() {
+    public TextProcessServiceImpl distinct() {
         textStream = textStream.distinct();
         return this;
     }
 
     public TextProcessService crossEnglishAndNum() {
 
-        this.text = this.buildString();
+        String text = this.buildString();
 
         Pattern pattern = Pattern.compile("[0-9]");
         Matcher matcher = pattern.matcher(text);
@@ -73,6 +70,7 @@ public class TextProcessServiceImpl implements TextProcessService {
         boolean isFind = matcher.find();
 
         if (!isFind || matcher.start() == 0) {
+            this.textStream = toStream(text);
             return this;
         }
 
@@ -82,10 +80,6 @@ public class TextProcessServiceImpl implements TextProcessService {
         String englishText = text.substring(0, numberStartIndex);
         String numberText = text.substring(numberStartIndex);
         StringBuilder result = new StringBuilder();
-
-        System.out.println(this.text);
-        System.out.println(englishText);
-        System.out.println(numberText);
 
         int engTextLength = englishText.length();
         int numTextLength = numberText.length();

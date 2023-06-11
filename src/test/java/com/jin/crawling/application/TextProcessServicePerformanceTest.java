@@ -1,11 +1,15 @@
 package com.jin.crawling.application;
 
 import com.jin.crawling.infrastructure.CrawlingClientImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class TextProcessServicePerformanceTest {
 
@@ -18,14 +22,14 @@ public class TextProcessServicePerformanceTest {
     String crawlingText;
 
 
-    @BeforeEach
+    @Before
     public void before() {
         textProcessService = new TextProcessServiceImpl();
         crawlingText = crawlingClient.getHtml("https://www.kia.com");
         System.out.println("crawling length: " + crawlingText.length() + "=================");
     }
 
-    public void testBeforeMethod() {
+    public void beforeMethod() {
         textProcessService = new TextProcessServiceImpl();
         textProcessService.initTextProcessService(crawlingText);
     }
@@ -42,40 +46,27 @@ public class TextProcessServicePerformanceTest {
 
     @Test
     public void testTextProcess() {
-        int loopCount = 1;
+        int loopCount = 100;
         textProcessPrepare();
 
         startTime("textProcess String");
         for (int i = 0; i < loopCount; i++) {
-            testTextProcessString();
-        }
-        endTime();
-
-        startTime("textProcess Stream");
-        for (int i = 0; i < loopCount; i++) {
-            testTextProcessStream();
+            textProcess();
         }
         endTime();
     }
 
     public void textProcessPrepare() {
         startTime("prepare");
-        testTextProcessString();
-        testTextProcessStream();
+        textProcess();
         endTime();
     }
 
-    public void testTextProcessString() {
-        testBeforeMethod();
-        textProcessService.sort();
-        textProcessService.deduplicate();
-    }
-
-    public void testTextProcessStream() {
-        testBeforeMethod();
+    public void textProcess() {
+        beforeMethod();
         textProcessService
                 .sort()
-                .deduplicate()
+                .distinct()
                 .buildString();
     }
 
@@ -89,42 +80,40 @@ public class TextProcessServicePerformanceTest {
         // 987ms
         startTime("filter");
         for (int i = 0; i < loopCount; i++) {
-            filterEnglishAndNum();
+            filter();
         }
         endTime();
     }
 
     public void filterPrepare() {
-        filterEnglishAndNum();
+        filter();
     }
 
-    public void filterEnglishAndNum() {
-        testBeforeMethod();
+    public void filter() {
+        beforeMethod();
     }
 
     @Test
-    public void testDeduplicate() {
+    public void testDistinct() {
 
         int loopCount = 2000;
-        deduplicatePrepare();
+        distinctPrepare();
 
-
-        // Winner, 1731ms
         startTime("deduplicate stream");
         for (int i = 0; i < loopCount; i++) {
-            deduplicateStream();
+            distinct();
         }
         endTime();
     }
 
-    public void deduplicatePrepare() {
+    public void distinctPrepare() {
         startTime("prepare");
-        deduplicateStream();
+        distinct();
         endTime();
     }
 
-    public void deduplicateStream() {
-        testBeforeMethod();
-        textProcessService.deduplicate().buildString();
+    public void distinct() {
+        beforeMethod();
+        textProcessService.distinct().buildString();
     }
 }

@@ -4,7 +4,7 @@ public interface TextProcessService {
 
     TextProcessService initTextProcessService(String originText);
     TextProcessService sort();
-    TextProcessService deduplicate();
+    TextProcessService distinct();
     TextProcessService crossEnglishAndNum();
     String buildString();
 }

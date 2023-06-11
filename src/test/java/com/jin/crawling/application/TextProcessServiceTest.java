@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 @RunWith(JUnitParamsRunner.class)
 public class TextProcessServiceTest {
 
@@ -55,7 +56,7 @@ public class TextProcessServiceTest {
     public void testDeduplicate(String text, String expected) {
 
         textProcessService.initTextProcessService(text);
-        String resultText = textProcessService.deduplicate().buildString();
+        String resultText = textProcessService.distinct().buildString();
 
         assertEquals(expected, resultText);
     }
@@ -86,7 +87,7 @@ public class TextProcessServiceTest {
 
         String resultText = textProcessService
                 .sort()
-                .deduplicate()
+                .distinct()
                 .crossEnglishAndNum()
                 .buildString();
 
